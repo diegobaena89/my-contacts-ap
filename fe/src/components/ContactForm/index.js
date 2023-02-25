@@ -1,33 +1,32 @@
-import {
-  forwardRef, useEffect, useImperativeHandle, useState,
-} from 'react';
+/* eslint-disable comma-dangle */
+/* eslint-disable object-curly-newline */
+/* eslint-disable quotes */
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-import { ButtonContainer, Form } from './styles';
+import { ButtonContainer, Form } from "./styles";
 
-import Input from '../Input';
-import Select from '../Select';
-import Button from '../Button';
-import FormGroup from '../FormGroup';
-import isEmailValid from '../../utils/isEmailValid';
-import useErrors from '../../hooks/useErrors';
-import formatPhone from '../../utils/formatPhone';
-import CategoriesService from '../../services/CategoriesService';
-import useSafeAsyncState from '../../hooks/useSafeAsyncState';
+import Input from "../Input";
+import Select from "../Select";
+import Button from "../Button";
+import FormGroup from "../FormGroup";
+import isEmailValid from "../../utils/isEmailValid";
+import useErrors from "../../hooks/useErrors";
+import formatPhone from "../../utils/formatPhone";
+import CategoriesService from "../../services/CategoriesService";
+import useSafeAsyncState from "../../hooks/useSafeAsyncState";
 
 const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [categoryId, setCategoryId] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const [categories, setCategories] = useSafeAsyncState([]);
   const [isLoadingCategories, setIsLoadingCategories] = useSafeAsyncState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const {
-    errors, setError, removeError, getMessageByFieldName,
-  } = useErrors();
+  const { errors, setError, removeError, getMessageByFieldName } = useErrors();
 
   useEffect(() => {
     async function loadCategories() {
@@ -35,7 +34,8 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
         const categoriesList = await CategoriesService.listCategories();
 
         setCategories(categoriesList);
-      } catch {} finally {
+      } catch {
+      } finally {
         setIsLoadingCategories(false);
       }
     }
@@ -43,30 +43,34 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
     loadCategories();
   }, [setCategories, setIsLoadingCategories]);
 
-  useImperativeHandle(ref, () => ({
-    setFieldValues: (contact) => {
-      setName(contact.name ?? '');
-      setEmail(contact.email ?? '');
-      setPhone(formatPhone(contact.phone ?? ''));
-      setCategoryId(contact.category_id ?? '');
-    },
-    resetValues: () => {
-      setName('');
-      setEmail('');
-      setPhone('');
-      setCategoryId('');
-    },
-  }), []);
+  useImperativeHandle(
+    ref,
+    () => ({
+      setFieldValues: (contact) => {
+        setName(contact.name ?? "");
+        setEmail(contact.email ?? "");
+        setPhone(formatPhone(contact.phone ?? ""));
+        setCategoryId(contact.category.id ?? "");
+      },
+      resetValues: () => {
+        setName("");
+        setEmail("");
+        setPhone("");
+        setCategoryId("");
+      },
+    }),
+    []
+  );
 
-  const isFormValid = (name && errors.length === 0);
+  const isFormValid = name && errors.length === 0;
 
   function handleNameChange(event) {
     setName(event.target.value);
 
     if (!event.target.value) {
-      setError({ field: 'name', message: 'Nome é obrigatório.' });
+      setError({ field: "name", message: "Nome é obrigatório." });
     } else {
-      removeError('name');
+      removeError("name");
     }
   }
 
@@ -74,9 +78,9 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
     setEmail(event.target.value);
 
     if (event.target.value && !isEmailValid(event.target.value)) {
-      setError({ field: 'email', message: 'E-mail inválido.' });
+      setError({ field: "email", message: "E-mail inválido." });
     } else {
-      removeError('email');
+      removeError("email");
     }
   }
 
@@ -92,7 +96,7 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
     await onSubmit({
       name,
       email,
-      phone: phone.replace(/\D/g, ''),
+      phone: phone.replace(/\D/g, ""),
       categoryId,
     });
 
@@ -101,9 +105,9 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
 
   return (
     <Form onSubmit={handleSubmit} noValidate>
-      <FormGroup error={getMessageByFieldName('name')}>
+      <FormGroup error={getMessageByFieldName("name")}>
         <Input
-          error={getMessageByFieldName('name')}
+          error={getMessageByFieldName("name")}
           placeholder="Nome *"
           value={name}
           onChange={handleNameChange}
@@ -111,10 +115,10 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
         />
       </FormGroup>
 
-      <FormGroup error={getMessageByFieldName('email')}>
+      <FormGroup error={getMessageByFieldName("email")}>
         <Input
           type="email"
-          error={getMessageByFieldName('email')}
+          error={getMessageByFieldName("email")}
           placeholder="E-mail"
           value={email}
           onChange={handleEmailChange}
@@ -141,18 +145,15 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
           <option value="">Sem categoria</option>
 
           {categories.map((category) => (
-            <option key={category.id} value={category.id}>{category.name}</option>
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
           ))}
-
         </Select>
       </FormGroup>
 
       <ButtonContainer>
-        <Button
-          type="submit"
-          disabled={!isFormValid}
-          isLoading={isSubmitting}
-        >
+        <Button type="submit" disabled={!isFormValid} isLoading={isSubmitting}>
           {buttonLabel}
         </Button>
       </ButtonContainer>

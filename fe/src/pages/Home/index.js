@@ -1,46 +1,52 @@
+/* eslint-disable object-curly-newline */
+/* eslint-disable indent */
+/* eslint-disable comma-dangle */
+/* eslint-disable function-paren-newline */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable quotes */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-one-expression-per-line */
-import { Link } from 'react-router-dom';
-import {
-  useCallback, useEffect, useMemo, useState,
-} from 'react';
-import {
-  Container, Card,
-} from './styles';
+import { Link } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Container, Card } from "./styles";
 
-import Loader from '../../components/Loader';
+import Loader from "../../components/Loader";
 
-import arrow from '../../assets/images/icons/arrow.svg';
-import edit from '../../assets/images/icons/edit.svg';
-import trash from '../../assets/images/icons/trash.svg';
-import emptyBox from '../../assets/images/empty-box.svg';
-import magnifierQuestion from '../../assets/images/magnifier-question.svg';
+import arrow from "../../assets/images/icons/arrow.svg";
+import edit from "../../assets/images/icons/edit.svg";
+import trash from "../../assets/images/icons/trash.svg";
+import emptyBox from "../../assets/images/empty-box.svg";
+import magnifierQuestion from "../../assets/images/magnifier-question.svg";
 
-import ContactsService from '../../services/ContactsService';
-import toast from '../../utils/toast';
-import formatPhone from '../../utils/formatPhone';
+import ContactsService from "../../services/ContactsService";
+import toast from "../../utils/toast";
+import formatPhone from "../../utils/formatPhone";
 
-import Modal from '../../components/Modal';
-import InputSearch from '../../components/InputSearch';
-import CreateRecordHeader from '../../components/CreateRecordHeader';
-import ListContainer from '../../components/ListContainer';
-import LoadErrorMessage from '../../components/LoadErrorMessage';
-import EmptyListContainer from '../../components/EmptyListContainer';
-import SearchNotFoundContainer from '../../components/SearchNotFoundContainer';
+import Modal from "../../components/Modal";
+import InputSearch from "../../components/InputSearch";
+import CreateRecordHeader from "../../components/CreateRecordHeader";
+import ListContainer from "../../components/ListContainer";
+import LoadErrorMessage from "../../components/LoadErrorMessage";
+import EmptyListContainer from "../../components/EmptyListContainer";
+import SearchNotFoundContainer from "../../components/SearchNotFoundContainer";
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
-  const [orderBy, setOrderBy] = useState('asc');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [orderBy, setOrderBy] = useState("asc");
+  const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [contactBeingDeleted, setContactBeingDeleted] = useState({});
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
-  const filteredContacts = useMemo(() => contacts.filter((contact) => (
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )), [contacts, searchTerm]);
+  const filteredContacts = useMemo(
+    () =>
+      contacts.filter((contact) =>
+        contact.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [contacts, searchTerm]
+  );
 
   const loadContacts = useCallback(async () => {
     try {
@@ -62,7 +68,7 @@ export default function Home() {
   }, [loadContacts]);
 
   function handleOrderBy() {
-    setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
+    setOrderBy((prevState) => (prevState === "asc" ? "desc" : "asc"));
   }
 
   function handleTryAgain() {
@@ -92,17 +98,17 @@ export default function Home() {
       handleCloseDeleteModal();
 
       toast({
-        type: 'success',
-        text: 'O contato foi deletado com sucesso!',
+        type: "success",
+        text: "O contato foi deletado com sucesso!",
       });
 
-      setContacts((prevState) => prevState.filter(
-        (contact) => contact.id !== contactBeingDeleted.id,
-      ));
+      setContacts((prevState) =>
+        prevState.filter((contact) => contact.id !== contactBeingDeleted.id)
+      );
     } catch {
       toast({
-        type: 'danger',
-        text: 'Ocorreu um erro ao deletar o contato!',
+        type: "danger",
+        text: "Ocorreu um erro ao deletar o contato!",
       });
     } finally {
       setIsLoadingDelete(false);
@@ -133,18 +139,18 @@ export default function Home() {
       )}
 
       <CreateRecordHeader
-        justifyContent={(
+        justifyContent={
           hasError
-            ? 'flex-end'
-            : (contacts.length > 0
-              ? 'space-between'
-              : 'center')
-        )}
+            ? "flex-end"
+            : contacts.length > 0
+            ? "space-between"
+            : "center"
+        }
       >
-        {(!hasError && contacts.length > 0) && (
+        {!hasError && contacts.length > 0 && (
           <strong>
             {filteredContacts.length}
-            {filteredContacts.length === 1 ? ' contato' : ' contatos'}
+            {filteredContacts.length === 1 ? " contato" : " contatos"}
           </strong>
         )}
         <Link to="/contacts/new">Criar contato</Link>
@@ -158,33 +164,36 @@ export default function Home() {
 
       {!hasError && (
         <>
-          {(contacts.length < 1 && !isLoading) && (
+          {contacts.length < 1 && !isLoading && (
             <EmptyListContainer>
               <img src={emptyBox} alt="Empty Box" />
               <p>
-                Você ainda não tem nenhum contato cadastrado!
-                Clique no botão <strong>”Novo contato”</strong> à cima para cadastrar
-                o seu primeiro!
+                Você ainda não tem nenhum contato cadastrado! Clique no botão{" "}
+                <strong>”Novo contato”</strong> à cima para cadastrar o seu
+                primeiro!
               </p>
             </EmptyListContainer>
           )}
 
-          {(contacts.length > 0 && filteredContacts.length < 1) && (
+          {contacts.length > 0 && filteredContacts.length < 1 && (
             <SearchNotFoundContainer>
               <img src={magnifierQuestion} alt="Search not found" />
 
-              <span>Nenhum resultado foi encontrado para <strong>”{searchTerm}”</strong>.</span>
+              <span>
+                Nenhum resultado foi encontrado para{" "}
+                <strong>”{searchTerm}”</strong>.
+              </span>
             </SearchNotFoundContainer>
           )}
 
           <ListContainer orderBy={orderBy}>
             {filteredContacts.length > 0 && (
-            <header>
-              <button type="button" onClick={handleOrderBy}>
-                <span>Nome</span>
-                <img src={arrow} alt="Arrow" />
-              </button>
-            </header>
+              <header>
+                <button type="button" onClick={handleOrderBy}>
+                  <span>Nome</span>
+                  <img src={arrow} alt="Arrow" />
+                </button>
+              </header>
             )}
 
             {filteredContacts.map((contact) => (
@@ -192,7 +201,9 @@ export default function Home() {
                 <div className="info">
                   <div className="contact-name">
                     <strong>{contact.name}</strong>
-                    {contact.category_name && <small>{contact.category_name}</small>}
+                    {contact.category.name && (
+                      <small>{contact.category.name}</small>
+                    )}
                   </div>
                   <span>{contact.email}</span>
                   <span>{formatPhone(contact.phone)}</span>
@@ -202,13 +213,15 @@ export default function Home() {
                   <Link to={`/contacts/edit/${contact.id}`}>
                     <img src={edit} alt="Edit" />
                   </Link>
-                  <button type="button" onClick={() => handleOpenDeleteModal(contact)}>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenDeleteModal(contact)}
+                  >
                     <img src={trash} alt="Trash" />
                   </button>
                 </div>
               </Card>
             ))}
-
           </ListContainer>
         </>
       )}
