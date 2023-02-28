@@ -1,11 +1,12 @@
-import { Route, Switch } from 'react-router-dom';
+/* eslint-disable quotes */
+import { Route, Switch } from "react-router-dom";
 
-import Home from './pages/Home';
-import NewContact from './pages/NewContact';
-import EditContact from './pages/EditContact';
-import Categories from './pages/Categories';
-import NewCategory from './pages/NewCategory';
-import EditCategory from './pages/EditCategory';
+import Home from "./pages/Home";
+import NewContact from "./pages/NewContact";
+import { Container as EditContact } from "./pages/EditContact/index";
+import Categories from "./pages/Categories";
+import NewCategory from "./pages/NewCategory";
+import EditCategory from "./pages/EditCategory";
 
 export default function Routes() {
   return (
