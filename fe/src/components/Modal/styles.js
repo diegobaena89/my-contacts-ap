@@ -1,4 +1,25 @@
-import styled from 'styled-components';
+/* eslint-disable quotes */
+import styled, { keyframes } from "styled-components";
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
+
+const scaleIn = keyframes`
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
+`;
 
 export const Overlay = styled.div`
   display: flex;
@@ -12,6 +33,7 @@ export const Overlay = styled.div`
   right: 0;
   top: 0;
   bottom: 0;
+  animation: ${fadeIn} 0.3s;
 `;
 
 export const Container = styled.div`
@@ -22,8 +44,9 @@ export const Container = styled.div`
   padding: 24px;
 
   background-color: #fff;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
   border-radius: 4px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
+  animation: ${scaleIn} 0.3s;
 
   > strong {
     font-size: 22px;
