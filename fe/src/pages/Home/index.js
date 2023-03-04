@@ -48,6 +48,10 @@ export default function Home() {
     handleOpenDeleteModal,
   } = useHome();
 
+  const hasContacts = contacts.length > 0;
+  const isListEmpty = !hasError && !isLoading && !hasContacts;
+  const isSearchEmpty = !hasError && hasContacts && filteredContacts.length < 1;
+
   return (
     <Container>
       <Loader isLoading={isLoading} />
@@ -64,7 +68,7 @@ export default function Home() {
         Essa ação não poderá ser desfeita!
       </Modal>
 
-      {contacts.length > 0 && (
+      {hasContacts && (
         <InputSearch
           searchTerm={searchTerm}
           handleChangeSearch={handleChangeSearch}
@@ -73,14 +77,10 @@ export default function Home() {
 
       <CreateRecordHeader
         justifyContent={
-          hasError
-            ? "flex-end"
-            : contacts.length > 0
-            ? "space-between"
-            : "center"
+          hasError ? "flex-end" : hasContacts ? "space-between" : "center"
         }
       >
-        {!hasError && contacts.length > 0 && (
+        {!hasError && hasContacts && (
           <strong>
             {filteredContacts.length}
             {filteredContacts.length === 1 ? " contato" : " contatos"}
@@ -95,9 +95,9 @@ export default function Home() {
         </LoadErrorMessage>
       )}
 
-      {!hasError && (
+      {hasContacts && (
         <>
-          {contacts.length < 1 && !isLoading && (
+          {isListEmpty && (
             <EmptyListContainer>
               <img src={emptyBox} alt="Empty Box" />
               <p>
@@ -108,7 +108,7 @@ export default function Home() {
             </EmptyListContainer>
           )}
 
-          {contacts.length > 0 && filteredContacts.length < 1 && (
+          {isSearchEmpty && (
             <SearchNotFoundContainer>
               <img src={magnifierQuestion} alt="Search not found" />
 
