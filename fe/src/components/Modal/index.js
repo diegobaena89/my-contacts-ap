@@ -1,11 +1,10 @@
-import PropTypes from 'prop-types';
+/* eslint-disable quotes */
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { Overlay, Container, Footer } from "./styles";
 
-import {
-  Overlay, Container, Footer,
-} from './styles';
-
-import Button from '../Button';
-import ReactPortal from '../ReactPortal';
+import Button from "../Button";
+import ReactPortal from "../ReactPortal";
 
 export default function Modal({
   danger,
@@ -18,20 +17,37 @@ export default function Modal({
   onCancel,
   onConfirm,
 }) {
-  if (!visible) {
+  const [shouldRender, setShouldRender] = useState(visible);
+
+  useEffect(() => {
+    if (visible) {
+      setShouldRender(true);
+    }
+
+    let timeoutId;
+
+    if (!visible) {
+      timeoutId = setTimeout(() => {
+        setShouldRender(false);
+      }, 300);
+    }
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [visible]);
+
+  if (!shouldRender) {
     return null;
   }
 
   return (
     <ReactPortal containerId="modal-root">
-      <Overlay>
-        <Container danger={danger}>
-
+      <Overlay isLeaving={!visible}>
+        <Container danger={danger} isLeaving={!visible}>
           <strong>{title}</strong>
 
-          <div className="modal-body">
-            {children}
-          </div>
+          <div className="modal-body">{children}</div>
 
           <Footer isLoading={isLoading}>
             <button
@@ -72,6 +88,6 @@ Modal.propTypes = {
 Modal.defaultProps = {
   danger: false,
   isLoading: false,
-  cancelLabel: 'Cancelar',
-  confirmLabel: 'Confirmar',
+  cancelLabel: "Cancelar",
+  confirmLabel: "Confirmar",
 };
