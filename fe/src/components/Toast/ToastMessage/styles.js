@@ -1,4 +1,16 @@
-import styled, { css } from 'styled-components';
+/* eslint-disable quotes */
+import styled, { css, keyframes } from "styled-components";
+
+const messageIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+    }
+`;
 
 const containerVariants = {
   default: css`
@@ -23,6 +35,7 @@ export const Container = styled.div`
   align-items: center;
 
   cursor: pointer;
+  animation: ${messageIn} 0.3s;
 
   ${({ type }) => containerVariants[type]}
 
